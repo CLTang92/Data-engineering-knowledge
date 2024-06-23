@@ -1,4 +1,4 @@
-Data engineering notes
+Data engineering notes (For personal learning purpose)
 
 
 Table of content
