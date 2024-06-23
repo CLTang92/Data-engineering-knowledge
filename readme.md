@@ -2,4 +2,4 @@
 
 ###Table of content
 
-[pur url]{/.url}
+[pur url]{./url}
