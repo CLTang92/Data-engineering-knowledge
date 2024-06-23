@@ -1,5 +1,4 @@
-#Elastic Search notes
+Elastic Search notes
 
-###Table of content
 
-[pur url]{./url}
+Table of content
