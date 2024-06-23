@@ -1,17 +1,15 @@
-Elastic Search notes
+Data engineering notes
 
 
 Table of content
-
-##flowchart
-
-"""
-codeblock
-"""
-
-"""mermaid
-flowchart LR
-  one --> two
-  three --> four
-
-  """
+- Cassandra
+- MongoDb
+- Hive
+- PostgreSQL
+- SQL server
+- ETL sample code
+- Build ETL pipeline
+- Hadoop and Spark, read and write to HDFS
+- Cloud computing
+- Elastic Search
+- REST API
