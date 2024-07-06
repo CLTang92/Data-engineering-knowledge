@@ -1,0 +1,272 @@
+MongoDb (noSQL) - support structure (row and column) and unstructured data eg. Images
+
+
+1) download mongoDb
+-  go to https://www.mongodb.com/download-center/community
+- select OS and download, is a .msi file
+- run the downloaded file - next - accept license- next - under choose setup type, click "complete" button, make sure check on "Install MongoD as a service" and Service name: MongoDB - Next - under Install MongoDB compass, uncheck "Install MongoDB compass" - Next - Install - Finish
+
+# go to directory C:/Program Files/MongoDB/Server/4.2 #place to start MongoDB
+
+#to run MongoDB
+1) go to command prompt, run as administrator
+2) in command prompt, navigate to bin folder
+
+cd C:/Program Files/MongoDB/Server/4.2/bin *black slash
+
+mongod.exe --dbpath "<directory of the data file, eg. C:\Program Files\MongoDB\Server\4.2\data> "
+
+
+
+3) **mongoDB didn't run, so search "Services" in our computer - select MongoDB server - right click and select "stop", then run again above code at command prompt 
+
+mongod.exe --dbpath "<directory of the data file, eg. C:/Program Files/MongoDB/Server/4.2/data *black slash> "
+
+4) if mongodb is running, should see "Listening on <ip address>"  waiting for connection for port xxxxx
+
+###mongodb server has started now, don't close this command prompt
+
+5) open bin directory and run mongodb.exe
+- go to C:/Program Files/MongoDB/Server/4.2/bin, double click mongodb.exe #start client application
+
+###now can start create database, collection
+
+##collection = table
+document = record
+
+
+6) in command prompt 
+#view databases
+show dbs
+
+#switch to a database
+use test
+
+#show tables/collections
+show tables #same as show collections
+
+#create "student" table
+db.students.insert(
+{name: "kimsom",
+class: 2,
+division: "A",
+subjects: ["english","science","music"]
+}
+)
+
+#update document
+
+db.students.update(
+{"name": "kimsom",
+$set: {"division": "C" }
+}
+)
+
+#query a collection
+db.students.find()
+
+#delete a document with a name
+db.students.remove({"name":"kimsom"})
+
+#drop a collection
+db.students.drop()
+
+####setup mongodb GUI (Studio3T)
+1) go to https://studio3t.com/download/
+2) click on "Download For Windows", it will auto-download a zip file, unzip and run studio-3t-x64.exe, next, next, under "Select Destination Directory" - browse to D drive, create new folder "ProgramFiles" then click select, then next to install - Finish
+
+### using MongoDb GUI
+1) open studio3T for mongodb (software)
+
+
+#mongo db, how to set up and create database
+#noSQL no restricted to number of row and field in a table
+
+##CREATE DATABASE##############
+1) Go to "Studio 3T for MongoDB, at the center of the page, select "Create a new connection"
+Connection name: myconnection #any name
+Click on "Test connection" button #test connection
+Then click "OK" and "Save"
+2) Under "Connection Manager" Window, select "myconnection" then click "Connect" button
+
+#before create any database for collection or document need a connection
+3) go to top left "Connect" Tab and select "myconnection" #can see all the databases
+#can see under database "test" there is a collection "students", double click "students" collection can see the document
+
+#create database
+1) right click "myconnection", choose "Add Database"
+Database Name: demodb #any name
+then click "OK"
+
+#create collection
+
+1) After created "demodb" database, a new node "demodb" in "myconnection", right click at "demodb" and "Add Collection"
+
+OR
+
+1) Expand "demodb" database, under "Collections", right click and "Add Collection"
+Collection Name: teachers #any name
+then click "Create"
+
+#create document in "teachers" collection *insert record
+1) double click "teachers" collection, look for the icon "Add Document" and click on it #should be 3rd icon
+2) Under Insert Document "JSON" window
+{
+	"firstname" : :"Kindson",
+	"lastname": "Munga",
+	"department": "Computer Science"
+}
+
+- then click on "Validate JSON" #show "Document contains valid JSON" - OK 
+
+- Can click "Add & Continue" and the document is added. then we can fill up the details of another document
+
+{
+	"firstname" : :"Saffron",
+	"lastname": "Lawrence",
+	"department": "Computer Science",
+	"age" : 45
+}
+
+- then click on "Validate JSON" #show "Document contains valid JSON" - OK 
+- Can click "Add & Continue" and "Cancel" to close window
+
+###UNTIL HERE 2 DOCUMENT ARE ADDED TO TEACHERS COLLECTION"
+
+####IMPORT DATA TO MONGODB######
+1) Click on "Import" icon
+2) Choose import format eg. CSV - OK
+3) Select "Import from CSV file" and click on "folder" icon and select the location of csv file - Open
+4) Click Execute - going to add as a collection
+5) Go to "Collection" and right click "Refresh All", under "Target options" tab
+- Target database: demodb
+- Target collection: vehicles 
+6) Click "Execute" button #will create a collection "vehicles" and store the csv data
+
+########DONE#############
+
+
+##############################################################MORE INFO##############################################
+
+MongoDb
+--------
+
+install MongoDB - community edition, MongoSh
+
+terminal
+mongosh #open shell, to enter terminal
+
+- test is default database, no data
+
+show dbs #to view database, default admin, config and local
+
+use <database>  #will switch to the database
+
+show collections #collections like tables
+
+db.dropDatabase() # drop database, syntax like java function
+
+cls #clear screen
+
+no need to create table, collections, database, if no exist, when add data will auto create it
+
+exit #exit terminal
+
+steps
+1) use <database name>
+2) db #access current database
+3) db.users.insertOne({name:"John"})  #users is the table/collection name
+4) db.users.find() #show everything in database #will show auto generated id for the object
+5) db.users.insertOne({name:"Sally", age: 19, address: {street: "987 North St"}, hobbies:["Running"]})  #users is the table/collection name
+no need define column and schema
+6) db.users.insertMany([{name:"Jill"},{name:"Mike"}])  #insert array of objects
+7) db.users.insertMany([{name:"Kyle", age: 26, hobbies: ["Weight lifting","bowling"], address: {street: "123 main st", city: "new york city"}},{name:"Billy", age: 41, hobbies: ["Swimming","bowling"], address: {street: "442 south st", city: "new york city"}}])
+8) db.users.find().limit(2) #show first 2 results
+9) db.users.find().sort({name:1}).limit(2) #show alphabetically ascending order by name, if descending order is -1, show 2 results
+10) db.users.find().sort({age: 1, name:-1}).limit(2) #sort by age ascending first then name descending order 
+11) db.users.find().skip(1).limit(2) #skip the first result and showing 2nd and 3rd result
+12) db.users.find({name: "Kyle"}) #find everyone with name Kyle
+13) db.users.find({name: "Kyle"},{name: 1, age: 1}) #find everyone with name Kyle, show only name and age column by defining name: 1, age: 1   
+14) db.users.find({name: "Kyle"},{name: 1, age: 1, _id: 0}) #_id: 0 means don't show id field
+15) db.users.find({name: "Kyle"},{age: 0}) #get all the fields except age
+
+complex queries
+1) db.users.find({name:{$eq: "Sally"}}) #give name equal to Sally
+2) db.users.find({name:{$ne: "Sally"}}) #give name NOT equal to Sally
+3) db.users.find({age:{$gt: 13}}) #find age greater than 13
+4) db.users.find({age:{$gte: 13}}) #find age greater than or equal to 13
+5) db.users.find({age:{$lte: 13}}) #find age less than or equal to 13
+6) db.users.find({age:{$lt: 13}}) #find age less than 13
+7) db.users.find({name: {$in: ["Kyle", "Sally"]}}) #give name equal to Kyle or Sally
+8) db.users.find({name: {$nin: ["Kyle", "Sally"]}}) #give name not in Kyle or Sally
+9) db.users.find({age:{exists: true}}) #show records that have age column **if age is null value will show, it is check whether got age key
+10)  db.users.find({age:{exists: false}}) #show records that DON'T have age column
+
+AND query
+1) db.users.find({age:{$gte: 20, $lte: 40}}) #find age greater or equal to 20 and lesser or equal to 40
+2) db.users.find({age: {$gte: 20, $lte: 40},name: {"Sally"}) #find age greater or equal to 20 and lesser or equal to 40, name must be Sally
+
+AND query (other way)
+1) db.users.find({$and: [{age: 26}, {name: "Kyle"}]}) #find kyle with 26
+
+OR query
+1) db.users.find({$or: [{age: {$lte: 20}}, {name: "Kyle"}]}) #find age less than or equal to 20 or name Kyle
+
+NOT query
+1) db.users.find({age: {$not: {$lte: 20}}}) #find age NOT less than or equal to 20
+
+
+compare
+------------
+db.users.insertMany([{name:"Tom", balance: 100, debt: 200},{name:"Kristin", balance: 20, debt: 0}])
+1) db.users.find({$expr: { $gt: ["$debt","$balance"]}}) #show debt greater than balance
+
+ 
+just take care about document, every single object stored as document.document inside collection.
+no schema, can add anything to collection, no need same column
+
+find nested field
+1) db.users.find({"address.street": "123 Main St"})
+
+findOne #find the first one
+----------------------------
+1) db.users.findOne({ age: {$lte: 40}}) #find first record age less than or equal to 40
+
+
+count
+----------------------------
+1) db.users.countDocuments({ age: {$lte: 40}}) #count the number of record age less than or equal to 40
+
+update
+---------
+1) db.users.updateOne({ age: 26}, { $set: { age: 27 } }) #update the first age 26 to 27
+2) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd")}, { $set: { name: "New name" } }) #update name by id 
+3) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd")}, { $inc: { age: 3 }}) #increment function, increase age by 3
+4) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd")}, { $rename: { name: "firstName" }}) #rename column
+
+unset #remove column/object
+-------------------------
+1) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd")}, { $unset: { age: "" } }) #remove age column/object by specific id
+2) db.users.updateMany({address: { $exists: true } }, { $unset: { address: "" }} ) #remove address column/object if exists
+
+
+push #add value
+-------------------
+1) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd") }, { $push: { hobbies: "Swimming" } }) #add swimming to hobbies list
+
+pull #remove value
+----------------------
+1) db.users.updateOne({ _id: ObjectId("61128009d73c133c25145c4dd") }, { $pull: { hobbies: "Bowling" } }) #remove Bowling from hobbies list
+
+
+replace
+----------
+1) db.users.replaceOne({ age: 30}, { name: "John" }) #find the first age 30 and replace name to John
+
+
+delete
+--------
+1) db.users.deleteOne({ name: "John" }) #delete the first record name with John
+2) db.users.deleteMany({ age: {$exists: false }}) #delete anything without age column
+
+

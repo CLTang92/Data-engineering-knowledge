@@ -1,0 +1,98 @@
+Elastic Search
+
+Kibana (interface, can send request to Elastic Search and get result)
+
+
+- node (when set node, cluster will be created automatically)
+- cluster (consist of 1 or more nodes)
+- index (document group by index, virtual reference to the document)
+- shard (collection of the document)
+- CRUD operations (create, read, update, delete)
+
+1) install Elastic Search and Kibana
+2) cmd prompt
+cd to the elastic search folder and run bin\elasticsearch.bat (for windows)
+**look for ip address..  9200 (this is end point of the REST API for communicate with cluster), if see this ip address with no error, then is fine
+**don't close this cmd prompt when want to run elastic search
+
+3) open another cmd prompt
+run curl http://localhost:9200/ (to send request to localhost 9200 (REST API), if get info of cluster means cluster can receive request)
+
+4) open cmd prompt
+cd to the Kibana folder, run bin\kibana.bat (windows)
+scroll down to get http://localhost:5601 and copy and paste in browser to see interface
+
+##################above pre-requisite work
+
+5) rename nodes and cluster (best practice)
+
+- go to a new tab of cmd prompt
+- cd to elastic search folder location, then type code . to open text editor **i think manually go to folder also can
+- then under config folder, select the elasticsearch.yml file and do rename - line 17 uncomment cluster.name and do renaming, same for node at line 22, node.name: xxxxx, and save
+- stop and restart elastic search and kibana for name change
+- restart elastic search by go to the particular prompt and press ctrl c and then run bin\elasticsearch.bat again
+- restart kibana by go to the particular prompt and press ctrl c and then run bin\kibana.bat (windows) 
+
+6) go to kibana interface in browser, left tab menu, scroll down, under management - Dev Tools
+
+7) format: GET API/parameter, check cluster health:
+GET _cluster/health
+*status green is healthy
+* select and run
+
+8) GET _nodes/stats #info of nodes
+
+9) create index
+PUT <name of index>
+eg. PUT favourite_candy
+
+
+9) POST (auto generate id), PUT - to index document, both can store document
+
+POST syntax: 
+POST <name of index>/_doc
+
+eg.
+POST favourite_candy/_doc
+	{ "first name": "abc",
+	  "Favourite candy": "mentos"
+	} 
+
+PUT syntax:
+PUT <name of index>/_doc/1 #means id 1 **use /doc will overwrite the document if they are same id, so user /_create to solve this, it will prompt error message, eg. PUT favourite_candy/_create/1
+eg.
+PUT favourite_candy/_doc/1
+	{ "first name": "DEF",
+	  "Favourite candy": "m&n"
+	} 
+
+10) read document
+syntax: GET <name of index>/_doc/<id>
+
+eg.GET favourite_candy/_doc/1
+
+11) update specific value in the document
+syntax:
+POST <name of the index>/_update/<document id>
+{
+	"doc": {
+	  "field1": "value",
+	  "field2": "value"
+	}
+}
+
+
+eg.
+
+POST favourite_candy/_update/1
+{
+	"doc": {
+	  "Favourite candy": "polo"
+	}
+}
+
+
+12) delete document
+syntax: DELETE <name of the index>/_doc/<ID>
+
+eg. DELETE favourite_candy/_doc/1
