@@ -1,0 +1,325 @@
+Apache hive (work like mapreduce but it is better can use sql like queries in the hive and in the back end it converts them into the map-reduce jobs, feel like our mysql database)
+-another tool design to work with hadoop
+-data warehouse system to process huge amount of structure data in hadoop
+-use HiveQL (sql like command)
+- meta store:  hive stores the meta-information about databases eg schema of table,  data type of the columns, location in the hdfs, etc.
+- 2 types of tables, managed table (both table data and table schema managed by hive, data located in folder named after the table within hive data warehouse, which is 
+
+file location on hdfs, if drop managed table, hive delete both schema (description of table) and data files associated with the table, default location (/user/hive/warehouse), can copy schema but not data of an existing table) and external table is only table schema controlled by hive, normally user will set up the folder location and within hdfs and copy the data files there, when delete external table, only the schema deleted, files remain.
+- when load data to hive, unmatched data type will not throw error and just fill up with null, useful as loading big data files into hive is expensive, do not want to load entire dataset just for few files.
+- support databases mysql, derby, postgres and oracle for its metastore.
+- support multiple data formats, also allows indexing, partitioning, bucket for query optimization.
+- only deal with cold data (seldom access) useless to process real-time data
+- tables in hive are similar to tables in relational database management system, each table belongs to a directory to hdfs, by default user/hive/warehouse directory eg. Students table at user/hive/warehouse/students. There are 2 types of table internal (managed table) and external table 
+
+##HIVE: INTERNAL AND EXTERNAL TABLES
+
+Internal table/Managed table (Hive)
+- default table in user/hive/warehouse directory in hdfs
+- fully managed by hive
+- step 1: create manged table
+step 2: load data (import from a file and load to table)
+LOAD DATA LOCAL INPATH '/home/hadoop/<filename>.txt'
+OVERWRITE INTO TABLE <table_name>
+- can change default internal table location by updating the path in configuration file - hive.metastore.warehouse.dir or providing a new path present in hdfs using SET LOCATION clause eg. 
+ALTER TABLE student_internal 
+SET LOCATION 
+'hdfs://localhost:8020/user/tables/student';
+- if drop table, metadata, data in table will be deleted in master node and hdfs * advised not to drop internal table, we can ENABLE NO_DROP to prevent dropping of table eg. ALTER TABLE student_internal ENABLE NO_DROP;
+- to prevent table being queried, can ENABLE OFFINE eg. ALTER TABLE 
+
+student_internal ENABLE OFFLINE;
+- usage:
+1) data is temporary and does not affect business in real-time
+2) want hive to manage tables and data
+
+
+External table
+- use external keyword to create external table
+- data fully managed by hdfs
+- creation query same as internal table except with keyword EXTERNAL 
+- step 1: create external table 
+step 2: load data (import from a file and load to table)
+LOAD DATA LOCAL INPATH '/home/hadoop/<filename>.txt'
+OVERWRITE INTO TABLE <table_name>
+- table stored in hdfs or any storage compatible with hdfs, because want to use 
+
+data outside of hive. Hive not responsible in managing the storage of external table.
+- tables can be stored in cloud platform eg. Google cloud or AWS.
+- deleting external table in hive only delete the metadata from master node, file will not be deleted from hdfs. Since will no longer able to query the data as schema is deleted when drop the table, to query data just create the table again and point to the location. 
+- security is managed in hdfs level, anyone can access hdfs file structure can access an external table
+- usage
+1) use data outside hive to perform different operations such as loading and merging
+2) data is of production quality 
+
+
+----------------------------------------------------------
+###HQL COMMANDS FOR DATA ANALYTICS
+
+
+HiveQL (HQL)
+- eg. using Beeline command line interface: execute s queries through HiveServer2
+- in Hive, queries write in HQL converted to MapReduce jobs to abstract the complexity and make it comfortable for user.
+Step 1: connect to HiveServer2
+!connect jdbc: hive2://m02.itversity.com:10000/;auth=noSasl
+Step 2: key in username and password. Then provide path where our database is stored eg. set hive.metastore.warehouse.dir=/user/<username>/warehouse;
+
+Step 3: connected to HiveServer2, ready to query our database. Eg. use <database_name>; , show tables; , desc <table_name>;
+
+Step 4: create table
+CREATE TABLE IF NOT EXISTS ...., 
+
+Step 5: upload new csv to hdfs storage
+hdfs dfs -put new.csv /user/<username>/warehouse/<database_name>.db/<table_name>
+
+Step 6: load data to the table
+load data inpath /user/<username>/warehouse/<database_name>.db/<table_name>/new.csv into table <table_name>;
+
+
+Step 7: select first 5 records
+
+select * from <table_name> limit 5;
+
+- decimal (6,2) for datatype mean 6 spaces with 2 right of decimal eg. 1234.56
+- char only 255
+- use "having" in group by when specify a condition
+- order by: only 1 reducer so result is complete. Sort by: multiple reducer, so the result might partial ordered result only
+
+
+Indexing (Hive)
+- Store words alphabetically represents indexing
+
+Bucketing (Hive)
+- different location for the words that start from the same character
+- use bucket in situation of cannot create a partition over the column price because its data type is float and there is an infinite number of unique prices are possible
+- manually define the number of buckets we want for such columns
+- the partitions can be subdivided into buckets based on the hash function of a column
+- gives extra structure to the data which can be used for more efficient queries.
+
+Eg.
+
+CREATE TABLE products ( product_id 
+
+string, brand string, size string, discount float, price float )
+PARTITIONED BY (gender string, category string, color string)
+CLUSTERED BY (price) INTO 50 BUCKETS;
+- use for column with very high cardinality
+
+Partitioning
+- organize the table into multiple partitions where we can group the same kind of data together
+- eg. first filter that most of the customer uses is Gender then they select categories like Shirt, its size, and color
+
+CREATE TABLE products ( product_id string, brand string, size string, discount float, price float )
+PARTITIONED BY (gender string, category string, color string);
+- hive will store the data in the directory 
+
+structure like:
+/user/hive/warehouse/mytable/gender=male/category=shoes/color=black
+- partitioning give performance benefit and organize data
+- when to use: high search query but low cardinality (meaning low number of partitions/directories eg. Country), data volume in each partition not very high
+
+-------------------------------------------------------------------------------
+
+
+data query and analytic
+- hadoop capacity with sql
+- application - data summarization, analysis, query
+- analysis for hdfs and amazon s3
+- document indexing increase quary speed
+- predictive modelling, log processing
+- features: sql type queries, OLAP based design (online analytical processing)-allow user to analyse information from  multiple database systems at one time,
+fast, scalable (defined directly in hadoop file system), extensible (hdfs provide horizontal extensibility),
+ac-hoc querying
+- other services: hive cli, hive web ui, hive metastore (central repository that stores all the structured information of various tables and partitions in the warehouse, include metadata of column
+and its type information the serializer and deserializer which is used to read and write data and the corresponding hdfs files 
+where the data is stored), hive server (thrift server accepts the request from different clients and provides to the hive driver), hive driver (receive queries from different sources such as web ui, cli, thrift server, jdbc driver, odbc driver, hive driver transfer the queries to compiler), 
+hive compiler (pass the query and perform semantic analysis on different query blocks and expressions, convert hive QL statement into mapreduce jobs), 
+hive execution engine (optimizer that generates the logical plan in the form of directed acyclic graph of mapreduce tasks and hdfs task, execute incoming tasks 
+in the order of their dependencies
+
+installation
+1) install oracle vm virtualbox
+2)cloudera quickstart vm
+
+hive data models
+- databases
+- tables
+- partitions (is section, can search particular parition without searching all)
+- buckets (similar to partition)
+
+
+2 types of tables:
+1) managed table/internal table (default) - data not secured, data will be erased when delete table
+2) external table - delete table will delete data and table from own local system but not from hive
+
+
+ctrl+L #clean Cli
+
+hql ending with semicolon
+
+#show column and datatype
+describe <table>
+
+#show managed/external table
+describe formatted <table>
+
+#create table with location, just like normal create table, but add location details
+create external table employee3 (ID int, name string, Salary float, Age int)
+row format delimited
+fields terminated by ','
+location '/user/cloudera/eduemp'; # /user/cloudera/ under web ui there hive - warehouse
+*sometimes no show the table in hue because network issue but no worry, will get back data
+
+
+#check table in web ui
+hive - warehouse - <database> or <table>
+
+#upload file in hue (web ui)
+1) go to hive - warehouse, click icon + and add file, eg. a csv file
+2) after upload, can double click the file to see the data
+
+#query data in hue
+1) click "Query" button - editor - Hive
+2) type command eg. SELECT ...
+
+#rename table
+Alter table <old_table_name> RENAME TO <new_table_name>;
+
+#add column to table
+Alter table <table_name> add column (<new_column> <datatype>);
+
+------------------
+
+
+2 types of partitioning - dynamic and static
+1) static or manual paritioning - need to pass the values of partition columns manually by loading the data into table, 
+so data files does not contain partitioned columns
+
+eg. load data local inpath '/home/cloudera/Desktop/Student.csv' into table Student
+partition(course='Hadoop');
+
+#and for java course and so on
+
+2) dynamic partitioning - just do once and the file will be configured automatically, values of paritioned columns exist within the
+table so it is not required  to pass the values of partition columns manually
+
+----------------
+#static partitioning, eg. partition student by course
+#csv file got id, name, age and course
+1) create database <database_name>
+
+
+2) use database <database_name>
+
+3) create table Student (ID int, Name string, Age int) #here didn't put course, because partition by course
+partitioned by (Course string)
+row format delimited
+fields terminated by ',';
+
+4) #create partition file based on hadoop course #/home/cloudera/Desktop is the desktop location of oracle VM cloudera
+load data local inpath '/home/cloudera/Desktop/Student.csv' into table Student
+partition(course='Hadoop');
+
+**need to refresh the page
+------------------------------
+#dynamic partitioning
+
+1) create database <database_name>
+
+2) use database <database_name>
+
+3) set hive.exec.dynamic.partition=true; #set this, because by default is static partitioning
+set hive.exec.dynamic.partition.mode=nonstrict; #by deafult static is strict
+
+4) create table edustud (ID int, Name string, Course string, Age int) #**here got put course although partition by course
+row format delimited
+fields terminated by ',';
+
+5) 
+load data local inpath '/home/cloudera/Desktop/Student.csv' into table edustud;
+
+6) create table student_part (ID int, Name string, Age int) #here didn't put course, because partition by course
+partitioned by (Course string)
+row format delimited
+fields terminated by ',';
+
+7)
+insert into student_part
+partition(Course)
+select ID, Name, Course, Age
+from edustud;
+
+8) select * from student_part #for checking after done loading, the course value is NULL
+
+9) refresh in hue to check partition created
+user student_part folder
+eg course=22, course=23, course=24, all represents different course
+course=_HIVE_DEFAULT_PARTITION #this is default all data members
+
+
+bucketing
+1) create database edubucket
+
+2) use database edubucket
+
+3) create table empbucket (ID int, Name string, Salary float, Age int)
+row format delimited
+fields terminated by ',';
+
+4) 
+load data local inpath '/home/cloudera/Desktop/Employee.csv' into table empbucket;
+
+5)set hive.enforce.bucketing = true;
+
+6)
+create table eduempbucket (ID int, Name string, Salary float, Age int)
+clustered by (ID) into 3 buckets
+row format delimited
+fields terminated by ',';
+
+7) insert overwrite table eduempbucket select * from empbucket;
+
+8) refresh in hue and check whether there is a bucket database in warehouse
+
+
+hive function
+1) min
+2) max
+3) sqrt
+4) upper #upper case
+5) + or - certain amount
+6) lower #lower case
+7) sort by & order by - both same
+8) join - inner, left outer join, right outer join, full outer join
+9) sum
+10) group by
+
+inner join
+---------------
+select e1.name, e2.Department from empjoin e1 join deptjoin e2 on e1.ID = e2.DepartmentID;
+
+left outer join
+---------------------
+select e1.name, e2.Department from empjoin e1 left outer join deptjoin e2 on e1.ID= e2.DepartmentID;
+
+
+right outer join
+---------------------
+select e1.name, e2.Department from empjoin e1 right outer join deptjoin e2 on e1.ID= e2.DepartmentID;
+
+
+full outer join
+---------------------
+select e1.name, e2.Department from empjoin e1 full outer join deptjoin e2 on e1.ID= e2.DepartmentID;
+
+
+
+limitations of hive
+-----------------------
+1) not capable of handling real-time data, real time can use spark and kafka
+2) not designed for online transaction processing
+3) hive queries contain high latency, longer time to process
+
+hive
+--------
+1) batch processing
