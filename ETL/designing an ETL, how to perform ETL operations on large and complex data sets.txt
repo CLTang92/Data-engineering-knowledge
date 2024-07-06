@@ -1,0 +1,59 @@
+SQL best practises - Designing an ETL
+
+- maybe going into an application, data warehouse, a dashboard
+- developing a solid warehouse for allowing people like data scientist and engineer can come to gather data
+
+
+Flow:
+Operational database -> extract some file, csv, tsv, positional,xml, json (eg. 20160108_Customer) - > raw DB (no complex logic, so no complex debuging, make sure insert correctly) -> staging DB (mapping (eg. same field but holding different value to represent the same thing) and deduplicating, this step can involve QA for checking, logging system  to track basic loading of system eg. what fileID is loaded, status, track error for file and etl steps, how many rows loaded)
+-> load to Data warehouse (1st level data)
+
+data warehouse
+- may have original table like transaction table (eg. f_transations), if want to aggregate the data -> create another table, can keep track how many times of transformation eg. agg_xxx , filter, sort, want to keep track how far, best practice to name it
+
+
+standard naming:
+f_ (face table) - instance of something happening, eg. transactions in fact table, has metric value like how many dollar a person spending. example of fields in transaction fact table are retail_id, customer_id, item_id, quantity, price, date_id
+d_ (dimension)
+agg_ (aggregate)
+
+
+
+===================================================================================
+
+How to perform ETL operations on large and complex data sets
+
+Steps:
+1) Define ETL goal and scope
+- what to achieve and boundaries of the project
+- identigy sources and types of data that want to extract, tranformations and validations that want to apply
+- consider the frequency, timing and triggers of the ETL jobs
+
+2) Choose ETL tools and technologies
+- compatability and connectivity with data sources and targets
+- the functionality and flexibility of the transformation and validation features, the performance and scalability of the processing and loading capabilities, and the cost and maintenance of the infrastructure and licences.
+Eg. SSIS (SQL Server Integration Services) is a tool for ETL tasks in SQL Server, allows users to easily create packages to extract data from various sources, tranform it as needed, and load it into destination, usrs can automate and streamline their ETL processes, saving time and effort.
+
+3) Design ETL architecture and workflow
+- ETL architecture is overall structure and configuration of ETL components such as servers, databases, pipelines and scripts. ETL workflow is the sequence and logic of ETL tasks, such as extraction, transformation, validation, loading and error handling. Design ETL architecture and workflow in a way that optimizes data quality, integrity, availability and resource utilization, performance and security.
+Architect a workflow that includes parallel processing for speed, data quality checks for accuracy and error handlings mechanism for reliability. Incorporate staging areas for data cleansing and transformation to ensure integrity.
+
+4) Implement ETL code and logic
+- write the scipts, queries, functions and rules that execute ETL tasks. May use different languages and frameworks such as SQL, Python, Java, Spark or Talend. Implement ETL code and logic in a way that ensures data accuracy, completeness, consistency, code readability, modularity and reusability.
+- writing efficient, modular code that can process data in batches or streams to manage memory and compute resources effectively. Use programming languages like Python, along with libraries such as Pandas for data manipulation and SQLAlchemy for database interactions. Develop functions for specific transformations, ensuring they can handle anomalies and maintain data integrity. Incorporate logging to track ETL process performance and errors. This approach ensure a robust, maintainable ETL process tailored to the dataset's specific needs.
+
+
+5) Test and debug ETL process
+- Before run ETL process on production data, need to test and debug it on test data to verify the ETL process works as expected and meet ETL goals and scope.
+- Test and debug ETL process in a way that covers all the possible scenarios and edge cases, detects and resolves any errors or issues.
+- May use different methods and tools for testing and debugging ETL process such as unit testing, integration testing, regression testing, logging, monitoring or debugging tools.
+- Testing and debugging ETL process involves systematically verifying each stage - extraction, transformation and loading to ensure accuracy and efficiency. Start by testing small data samples to validate the logic of transformations and the integrity of loaded data.
+- Use automated testing tools to simulate various data scenarios and edge cases.
+- Monitor performance metrics to identify bottlenecks or errors in data processing.
+- Incorporate Logging for error tracking and implement a feedback loop to continuosly refine the ETL process based on test outcomes, ensuring a reliable data pipeline.
+
+6) Deploy and run ETL process
+- Deploy and run ETL process on production data.
+- Ensure data availability, reliability, security, process efficiency, scalability and recoveribility.
+- May use different tools and techniques for deploying and running ETL process such as version control, automation, orchestration or backup and recovery tools.
+- ETL tools typically provide convenient way to deploy a solution in an operational environment.
