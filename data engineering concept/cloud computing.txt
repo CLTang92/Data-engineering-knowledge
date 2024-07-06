@@ -1,0 +1,92 @@
+Cloud computing (service model and deployment model)
+
+deployment model - public cloud (eg. aws), private cloud or hybrid cloud
+
+
+service model - IAAS, PAAS and SAAS
+
+Infrastructure as a Service (IAAS)
+- if your business needs a virtual machine, already have all the expertise to install software top of it
+- provide basic computing infrastructure
+- pay-for-what-you-use model
+- eg. AWS, Microsoft Azure and Google Compute Engine
+- users: IT administrators
+- manage applications, datam runtime, middleware and OS
+
+PAAS
+- require a platform for building software products
+- provides cloud platforms and runtime environments for developing, testing and managing applications
+- allows software developers to deploy applcations without requiring all the related infrastructure
+- users: software developers
+- manage applications and data
+
+SAAS
+- doesn't want to maintain any IT equipment
+- want a finished product
+- all software and hardware are provided and managed by a vendor so don't have to maintain anything
+- eg. end customers
+- nothing to manage
+
+cloud provider
+- aws - IAAS, PAAS, SAAS
+
+Microsoft Azure
+- building, testing, deploying to server
+- IAAS, PAAS, SAAS
+- support lot of programming language
+
+IBM cloud
+- IAAS, PAAS, SAAS
+- offer public, private and hydrid cloud delivery model
+
+VMWARE
+- cloud computing and platform virtualization, software and services
+
+Google Cloud Platform
+-suite of cloud computing services that run on the same infrastructure that Google uses internally for end user product eg. google search and youtube
+- data storage, data analytic and machine learning
+
+
+
+Lifecycle of cloud computing solution
+Steps:
+1) Define the purpose - understand the requirement and determine what type of application to run on the cloud
+2) Define the hardware - choose compute service that will provide right support where you resize the compute capacity in the cloud to run application programs
+eg. EC2 (looking for IS), Lambda (serverless computing), elastic container service
+3) Define the storage - choose a storage service where you can backup and archieve your data over the internet.
+eg. S3 (separately for backup), EFS and Glacier (separately backup for archieve)
+4) Define the network - define a network that securely delivers data, videos, applications etc. with low latency and high transfer speed.
+eg. VPC (network), Route 53 (DNS), Direct Connect (Private p2p line)
+5) Define security - setup security service which enable services for user authentication or limiting access to a certain set of users on your AWS resources
+eg. IAM (authentication and authorization), KMS (data encrytion), Cognito
+6) Define management processes and tools - can have complete control on cloud environment by defining management tools which monitor AWS resoures and the customer applications running on AWS platform.
+eg. CloudWatch (monitoring), Auto scaling (automation) and CloudFormation (deployment)
+7) Testing the process - verify the process using AWS developer tools where you can build, test and deploy your code quickly
+eg. CodeStar, CodeBuild, CodePipeline
+8) Analytics - analyze and visualize data by using analytics services where you can start querying data instantly and get results
+eg. Athena, EMR (Elastic mapReduce), CloudSearch
+
+
+
+AWS EC2 and AWS S3
+--------------------------
+
+AWS EC2
+- web service that provides a secure and resizable compute capacity in the cloud
+- can be used to launched as many virtual servers you need
+
+AWS S3
+- Simple Storage Service
+- store and retrieve any amount of data at any time on the web
+
+steps:
+1) create an AWS account
+2) Create an AWS S3 bucket and upload files *can set the file to public
+3) create EC2 instance (create virtual machine in cloud) and launch
+4) at command prompt, login to EC2 instance - public ip address of ec2 instance and go to the folder we want eg. /var/www/html
+5) synchronize AWS S3 bucket with AWS EC2 instance, in command prompt type
+aws s3 sync <name of the bucket> <the folder that we want to put the data>, for example
+aws s3 sync s3://websitebuckets1 /var/www/html
+
+6) type ls to list the file from s3 bucket
+7) at the web browser type public ip (default is Apache page if no file) of the EC2 instance to check whether the file in S3 is shown
