@@ -1,0 +1,76 @@
+Apache Kafka
+- Streaming data, ingest it in real-time and process it at the same rate
+- events streaming platforms eg. Netflix uses Kafka to provide tv show recommendations in real time. For Uber’s technology stack, Kafka is considered the cornerstone. It uses Kafka for many things, such as computing the cab fare in real time depending on the demand, destination, and availability of cabs.
+- set up Kafka servers with Zookeeper and KRaft from the terminal and use the Kafka python client library to read and write events to topics.
+- distributed, real-time streaming platform for large-scale data processing.
+- real-time analytics and building event-driven architectures and streaming pipelines to process data streams.
+- various components like Topics, Producers, Consumers, and Brokers that make Kafka a scalable, fault-tolerant and durable event-streaming platform
+- Kafka event: event key, values, time-stamp and optional metadata. event key is specific to an event. Eg. store the GPS data of cabs, we may assign the cab ID to the event key. The event value field stores the data we want to write to the topics. A timestamp is added to an event
+- Publish-subscribe messaging: sender sends messages to a destination, and whoever subscribes to that destination receives messages. In this case, the central destination is called the topic (like table).
+- Event-streaming: evolution of pub-sub messaging where messages are stored and transformed as they occur, continuous flow of events from sender to destination.
+- A Kafka topic is similar to a database table and is used to store data. can create as many topics as you want, such as a “tweets-data” topic to hold tweets data. 
+- Topics are partitioned to allow data to be spread across multiple brokers(servers) for scalability.
+- Partitions are log files that hold the actual data.
+- A topic can have many partitions, which can also be configured programmatically.
+- Events with the same event key are appended to the same partition
+- Producers are the applications that send data to Kafka topics,  can be any data source, such as Twitter, Reddit, Logs, GPS data etc.
+- Kafka Consumers are the applications or systems that consume the data from the topics.
+- consumers first need to subscribe to a topic and then can read from single or multiple partitions.
+- Kafka guarantees ordering across multiple consumer instances by assigning partitions to consumers of the group
+- multiple copies of topic partitions are kept on different brokers. The default number of copies is 3, but this can be changed programatically
+- Each active Kafka cluster has special brokers called controller nodes. The Zookeeper/Raft Protocol is responsible for controller selection
+- Kafka uses Zookeeper to keep track of all the brokers in a cluster
+
+1) Notify Kafka when a broker dies, a new broker joins, a topic is deleted or created, etc.
+
+2) Responsible for identifying and Electing the leader broker of a partition.
+
+3) Metadata management, Permission, and configuration management of topics.
+
+- KRaft: With Zookeeper, Kafka clusters can only have 200,000 partitions.
+A high-level leader election, while a broker joins or leaves, overloads the Zookeeper server slowing down the entire process.
+Zookeeper security lags behind Kafka’s security.
+1) Kafka’s metadata are logs only, these logs can be consumed by Kafka brokers as internal metadata topics.
+2) Kafka used itself to store metadata. A protocol called Raft was used for controller election, hence the name KRaft.
+
+----
+Some use cases of Kafka are
+- Real-time data pipeline
+- Streaming Data Analytics
+- Event-Driven Architectures
+
+
+-----
+Kafka key capabilities
+1) To publish (write) and subscribe to (read) streams of events, including continuous import/export of your data from other systems.
+
+2) To store streams of events durably and reliably
+
+3) To process streams of events as they occur or retrospectively.
+
+
+---------------
+
+
+Topics in Kafka
+- Create topics in Kafka
+Step 1: need to start Kafka server and zookeeper
+Step 2: create topic and need to define number of partitions and replications factor (number of duplicate, note that cannot more than number of server)
+
+Command as:
+
+'kafka-topics.bat -zookeeper 
+
+localhost:2181 -topic <topic_name> --create ?partitions <value> --replication-factor <value>'
+
+Note: Instead '.bat', use '.sh' while creating topics on Linux(accordingly).
+------
+- Listing the number of Topics, use '-list' command as:
+'kafka-topics.bat -zookeeper localhost:2181 -list'.
+
+- to describe a topic within the broker, use '-describe' command as:
+'kafka-topics.bat -zookeeper localhost:2181 -describe --topic <topic_name>'.
+
+- To delete a topic, use '-delete' command,: 
+
+'kafka-topics.sh -zookeeper localhost:2181 -topic<topic_name> --delete'

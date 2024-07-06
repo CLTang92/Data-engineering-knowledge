@@ -1,0 +1,10 @@
+Difference Between OLTP and OLAP
+
+
+OLTP and OLAP
+- processing capabilities
+- one manage real-time processes and another analyzing huge volumes of data
+- OLTP (Online Transaction Processing); handling large number of transactions (insert, update, delete data in database) happening in real-time, transactional data stored in relational databases that ensure ACID properties for transactions eg. E-commerce ordering, online hotel bookings, atm transactions, etc.
+- OLAP (Online Analytical Processing) databases store data in aggregated form from multiple OLTP databases, stored within a data warehouse. Instead of transaction-level view, give multidimensional view of data eg. View aggregated sales data, view according to multiple categories and sub-categories-location, time and customer. 
+Provide advanced analytic on the data.
+- characteristics of OLAP: deal with historical data, data never modified, stores data in data warehouse in multidimensional form, data analysis purpose.

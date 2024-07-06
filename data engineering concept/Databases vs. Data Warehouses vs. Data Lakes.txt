@@ -1,0 +1,44 @@
+Databases vs. Data Warehouses vs. Data Lakes
+
+Database
+- database itself or dbms
+- relational database store data in table (fixed row and column)
+- no relational database (noSQL) stores data in variety model eg. JSON, BSON, key-value pairs, table with rows and dynamic 
+
+columns and nodes and edges
+- ACID (Atomicity, Consistency, Isolation, Durability) transactions to ensure data integrity
+- Relational databases: Oracle, MySQL, Microsoft SQL Server and PostgreSQL
+- Document databases:  MongoDB and CouchDB
+- Key-value databases: Redis and DynamoDB
+- wide-column stores: cassandra and hbase
+- graph databases: neo4j and Amazon neptune
+
+
+Data warehouses and data lakes
+- support online analytical processing (OLAP)
+- OLAP collect data from different variety of sources, a range analytical use cases from business intelligence and reporting to forecasting
+
+data warehouse
+- a giant databases that optimized for analytics
+- store current and historical data from 1 or more system
+- ETL processes move data from its original source to data warehouse
+- business analyst can connect to data warehouses with BI tools, looks insights and generate report
+- highly structured
+- x intended to transaction and concurrency needs
+- EG. Snowflakes and Amazon Redshift
+- create etl processes to move data to data warehouse 
+
+Data lakes(like data warehouse but store data in original, raw format)
+- repository of data from disparate sources, stores original data format eg. Json, bson, csv, tsv, avro, orc, and parquet, can store databases
+- Primary purpose is analyze data to gain insights
+- cheap storage
+- eg. Starburst, presto, atlas data lake can give database like view.
+- can form storage layer for database
+- data not need to transform to add to data lake
+- data can be processed on variety of OLAP systems and visualized with BI tools.
+- support machine learning and predictive analytics 
+- same as data warehouse, x intended to transaction and concurrency needs of an application
+- storage and compute capabilities
+- Storage: eg. Aws s3, Azure data lake storage gen2, Google cloud storage 
+- organizing and querying data eg. MongoDB Atlas data lake, aws athena, presto, starburst, databricks sql analytics
+- may not require data to be moved eg. MongoDB Atlas data lake able to access data stored in amazon s3 bucket 

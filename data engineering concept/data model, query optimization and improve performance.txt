@@ -1,0 +1,29 @@
+Data model
+1) relational model - normalized
+2) dimensional model - star schema, snowflake schema, denormalized, got fact (quantify of data, measurement eg. Quarterly sales data number) and dimension (who, what and where of fact)
+
+
+Star schema
+- 1 fact table, multiple dimension tables
+- query data faster with simpler queries than normalized database design
+- denormalized, repeating of same values within a table 
+- simple query writing
+- more storage space
+- data integrity issue
+
+Snowflake schema
+- similar to star schema, but it splits dimensional tables into further dimensional tables (also called lookup tables)
+- each dimension split until it is normalized, no redundancy
+- more complex query design
+- less storage space 
+
+
+-----------------------------------------------------------------------
+
+Query optimization and improve performance
+- less join
+- join start with smaller table
+- data type don't use too large if not required
+- avoid subqueries 
+- avoid null, use 0, empty string or other specific value
+
