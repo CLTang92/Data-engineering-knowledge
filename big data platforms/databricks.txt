@@ -1,0 +1,191 @@
+#####DATABRICKS####################
+
+- analyse data
+- derives insights using SparkSQL
+- build predictive models using SparkML
+- provide active connections to visualization tools such asa PowerBI, Tableau, Qlikview etc.
+
+Advantages of Databricks
+- Support for the frameworks (scikit-learn, TensorFlow, Keras), libraries (matplotlib, pandas, numpy), scripting languages (eg. R, Python, Scala or SQL) tools and IDEs (JupyterLab, Rstudio)
+- Delivers a Unified Data Anlalytics Platform, data engineer, data scientists, data analysts, business analysts can work in tandem on the same notebook.
+- Flexibility across different ecosystems- AWS, GCP, Azure
+- Data reliability and scalability through delta lake
+- basic built-in visualization
+- AutoML and model lifecycle management through MLFLOW
+- 10X Faster ETL's
+
+
+###DATABRICKS INFRASTRUCTURE####
+- databricks gather different types of data (eg. payment data, order data, product data, customer data) and do transformation, analyze, process, thereafter, maybe go to mlflow, datawarehousing or link to visualization.
+
+
+------------------------------
+data analyst -
+huge amount of data - cleaning, transform, process
+requirement:
+kpi - active customer
+eg. 
+how many customer done purchase
+how many customer viewing product
+
+each day - dumping data -table, now this data connecting to tableau
+
+in databricks can create notebook -- schedule (daily, weekly or monthly)
+
+
+-----------------------------------
+
+data engineer-
+migration data, etl
+process
+
+databricks - faster etls
+
+connect jdbc connection - get data from sql server to cloud #migration activity
+- can use databricks environment to select multiple nodes and driver, can faster activity and process easily, available easily and quickly
+
+can write code in pyspark, spark sql, scala, r
+
+-------------------------------------------------
+
+data science -
+scikitlearn libraries
+python libraries
+predictive modeling
+mlflow
+---------------------------------------------------
+
+####Databricks community edition###############
+1) In web browser search "databricks community edition" and click on "Get Started with Databricks - Databricks Official Site"
+2) "Create your Databricks account" - fill in details here - then click "Continue"
+3) Under "Choose a cloud provider",  click on "Get started with Community Edition"
+4) Sign in here "https://community.cloud.databricks.com/login.html?tuuid=bf11dfb0-1be8-40b4-b0ba-81eed3ee5b7f"
+5) After signed in, Left side - "Compute" button, select it
+6) #create cluster, then only can use notebook
+- go to the right, click on "Create compute"
+Cluster name: databricksproject #any name
+Databricks runtime version:  #use default
+- click "Create cluster"
+7) #now create notebook
+- go to left panel, select" Create" - "Notebook"
+- at the top, can rename the notebook to "databricks projects", at the right can select what language eg. Puthon, SQL, Scala, R
+#This case select Python
+
+8) At the right side, can see "Starting", can see "databricksproject" cluster still running, once done only select then only can execute at notebook
+
+
+###DO project#############
+KPI:
+1. Gender category distribution of taking loan
+2. Top occupation taking loan
+3. Top loan category on which loan taken
+4. Which marital status category people taking loan
+
+#############
+
+At databricks - notebook
+
+
+##create table
+1) Go to left panel - "Data" - "Create Table"
+2) Now got different options:  "Upload file", "S3" and "Other Data Source", click on "Upload file" and upload the data file we want, the click "Create table with UI"
+3) Under "Select a CLuster to Preview the Table"
+Cluster: databricksproject
+- and click "Preview table"
+4) Under "Specify Table Attributes"
+Table name: Loan analysis #any name
+Create a Database: "default"
+File type: CSV #this case is CSV
+Column Delimiter: #empty
+- Check on "First row is header #if the header didn't show as header in the preview
+- Check on "infer schema" #if already auto-detect the data type of each field
+- Click "Create Table"
+
+##go to notebook and run some SQL##
+1) Left panel select "Recents" - "databricks projects"
+2) show tables #see what table we have
+3) select * from loan_analysis #show data in the table "loan_analysis"
+4) describe loan_analysis #show schema of the "loan_analysis" table (column name, data type and comment)
+
+=======================================
+###Do analysis###
+
+Q1. Gender category distribution of taking loan
+
+1) Click on the right arrow down button - "Show title"
+2) Rename "Untitled" to "gender wise distribution loan"
+3) run query:
+select gender, sum(Loan) from loan_analysis
+group by gender
+
+4) result here is in table format, can visualize it by clicking "+" - "Visualization"
+** Visualization type: Bar, Y columns: gender, x columns: sum(Loan), Group by: gender
+* if want to show data label, can go to "Data Labels" tab can check on "Show data labels"
+- then click "Save"
+
+----------------------
+
+Q2. Top occupation taking loan (Top 10 only)
+
+
+1) Click on the right arrow down button - "Show title"
+2) Rename "Untitled" to "top occupation of taking loan"
+3) run query:
+
+#show how many types of occupation
+select distinct occupation from loan_analysis
+
+#select top 10 occupation taking loan
+select occupation, sum(Loan) from loan_analysis
+group by occupation
+order by 2 desc #2 means by 2nd column which is column sum(Loan)
+limit 10
+
+4) result here is in table format, can visualize it by clicking "+" - "Visualization"
+** Visualization type: Bar, Y columns: occupation, x columns: sum(Loan), Group by: occupation
+* if want to show data label, can go to "Data Labels" tab can check on "Show data labels"
+- then click "Save"
+
+------------------------------
+
+
+Q3. Top loan category on which loan taken
+
+1) Click on the right arrow down button - "Show title"
+2) Rename "Untitled" to "loan category distribution"
+3) run query:
+
+#show how many types of loan category
+select distinct 'loan category' from loan_analysis #if there is a spacing on the column name, need to use single quote ''
+
+#show top 5 sum(loan) distribution by category
+select 'loan category', sum(Loan) from loan_analysis
+group by 1 #means 'loan category'
+order by 2 desc #2 means by 2nd column which is sum(Loan)
+limit 5
+
+
+4) result here is in table format, can visualize it by clicking "+" - "Visualization"
+** Visualization type: Pie, X columns: loan category, Y columns: sum(Loan), Group by: <empty>
+* if want to show data label, can go to "Data Labels" tab can check on "Show data labels"
+- then click "Save"
+
+--------------------------------------
+
+Q4. Which marital status category people taking loan
+
+1) Click on the right arrow down button - "Show title"
+2) Rename "Untitled" to "marital status taking loan"
+3) run query:
+
+#show how many types of marital status
+select distinct 'Marital Status' from loan_analysis #if there is a spacing on the column name, need to use single quote ''
+
+#show sum of loan by marital status
+select 'Marital Status', sum(Loan) from loan_analysis
+group by 1 #means 'Marital Status'
+
+4) result here is in table format, can visualize it by clicking "+" - "Visualization"
+** Visualization type: Area, X columns: Marital Status, Y columns: sum(Loan), Group by: Marital Status
+* if want to show data label, can go to "Data Labels" tab can check on "Show data labels"
+- then click "Save"

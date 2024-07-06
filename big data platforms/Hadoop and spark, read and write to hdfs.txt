@@ -1,0 +1,76 @@
+Save Data from Spark to HDFS
+
+hadoop
+-----------
+1) 
+#start name node and data node
+start-dfs.cmd
+C:\hadoop\sbin\start-dfs.cmd
+
+
+2)
+
+start-yarn.cmd
+C:\hadoop\sbin\start-yarn.cmd
+
+#browser (hdfs)
+localhost:9870
+
+
+#to see resource manager
+localhost:8088
+
+#stop all node
+stop-all.cmd
+\tmp\hadoop-lengt\dfs\name succesfully formatted
+-----------
+spark
+run as administrator
+
+run spark
+C:\Spark\spark-3.5.1-bin-hadoop3\bin\spark-shell
+
+run pyspark
+C:\Spark\spark-3.5.1-bin-hadoop3\bin\pyspark
+
+
+3) run pyspark with options connect with yarn
+C:\Spark\spark-3.5.1-bin-hadoop3\bin\pyspark --master yarn --queue dev --name saving_data
+
+run in web browser
+http://localhost:4040/ or http://laptop-kqp62e30:4040/
+
+
+C:\Spark\spark-3.5.1-bin-hadoop3\bin\pyspark --master yarn --queue dev --name saving_data
+\tmp\hadoop-lengt\dfs\name
+
+4) in pyspark shell
+titanic = spark.read.format("csv).\
+		option("header",True).\
+		option("separator",",").\
+		option("inferSchema",True).\
+		load("hdfs:///titanic.csv")
+
+titanic = titanic.select("Name","Fare")
+import pyspark.sql.functions as f
+titanic = titanic.withColumn("Fare_log",f.log(f.col("Fare")))
+titanic.show(3, False) #show top 3 rows
+
+5)
+#for single partition
+#write to hdfs, overwrite mode create new file, append mode is append to existing file
+titanic.write.mode("overwrite").parquet("hdfs:///titanic.parquet")
+
+#for multiple partition and group to only 1 file, *no more distributed
+titanic.repartition(1).write.mode("overwrite").parquet("hdfs:///titanic.parquet")
+
+6)
+#check ui look for the file
+open browser
+localhost:9870
+utilities-browse the file system
+
+7)
+titanic_new = spark.read.parquet("hdfs:///titanic.parquet")
+titanic_new.show(3, False) #show top 3 rows
+

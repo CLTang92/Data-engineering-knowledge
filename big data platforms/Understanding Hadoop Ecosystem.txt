@@ -1,0 +1,34 @@
+##Understanding Hadoop Ecosystem: 
+
+Architecture, Components & Tools
+--------------------------------------
+
+Hadoop
+- Hive (SQL) or pig (data flow, data transformation process, compiled for mapreduce job), both for data query (store in HDFS-redundant, reliable storage)
+- data storage, processing, access and management 
+- mapreduce: process file quickly, cluster management, process and manage large dataset, 2 phases: map(divide data to chunks and process in parallel), reduce (each group of intermediate key-value pairs pass to reducer which compute final output based on the value), run analytics on large datasets using mapreduce programming model
+
+-HBASE (column db storage) use HDFS, provide NoSQL storage solution, store large amount unstructured data.
+-HDFS: data splits into blocks then replicate in multiple nodes in the cluster.
+-YARN: specifies how job should be run
+- spark: in-memory data processing, main component of hadoop ecosystem to run mapreduce job
+- open source: HDFS, YARN, mapreduce
+- benefit: hadoop real time analysis of streaming data, data security(encrytion and authentication methods)
+
+MapReduce
+- framework to write application to process large amount of data in large volumes.
+- allow data stored in distributed form
+- store in distributed form, simplifying large data and large computer
+- can use java, scala, live, pig and python
+- data availability, data matches sent to various locations within the network, copies of data are available
+- parallel processing
+-usage: analyse consumer behavior product recommendation, check certain info in social media, understand clicks and logs for online clients.
+
+YARN (hadoop 2.0 and later)
+- resource management layer in hadoop
+- allow processing engine eg. Interactive processing, graph processing, batch processing, stream processing to run and process data stored in HDFS.
+- job scheduling
+- run stream data processsing and interactive querying side by side with MapReduce batch jobs
+- run non-MapReduce applications too
+-container is physical resources, eg. CPU cores, RAM, disks) on a single node
+- no more batch processing delay due to separate hdfs and mapReduce
