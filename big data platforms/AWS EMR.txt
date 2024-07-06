@@ -1,0 +1,14 @@
+AWS EMR (similar to YARN)
+- run hadoop in aws using EMR
+- a managed service for processing and abalyzing large datasets
+- run and scale apache spark, hive, presto, hbase, other big data workloads
+- data processing, interactive analytics and machine learning
+- hadoop in Amazon EMR can be used as elastic query layer
+- can use hdfs with amazon s3 to store input and output data
+- can encrypt hdfs using Amazon EMR security configuration.
+
+
+EMRFS (EMR file system)
+- leverage Amazon S3 as data layer for Hadoop
+- storing data in amazon S3 can decouple compute layer from storage layer, allow size EMR cluster
+- allow Amazon S3 as datalake
