@@ -2,14 +2,35 @@ Data engineering notes (For self-learning purpose)
 
 
 Table of content
-- Cassandra
-- MongoDb
-- Hive
-- PostgreSQL
-- SQL server
-- ETL sample code
-- Build ETL pipeline
-- Hadoop and Spark, read and write to HDFS
-- Cloud computing
-- Elastic Search
-- REST API
+
+1) ETL
+   - sample project
+       a) How to remotely SSH (connect) Visual Studio Code to AWS EC2
+       b) Steps: End to end pipeline using Python
+       c) analytics.py (Python file)
+   - data pipeline design concept.txt
+   - designing an ETL, how to perform ETL operations on large and complex data sets
+   - simple ETL example (Python file)
+  
+2) Big data platforms
+   - AWS EMR
+   - Hadoop and spark, read and write to hdfs
+   - Understanding Hadoop Ecosystem
+   - databricks
+  
+3) Data engineering concept
+   - Databases vs. Data Warehouses vs. Data Lakes
+   - Difference Between OLTP and OLAP
+   - Kafka
+   - REST API
+   - cloud computing
+   - data model, query optimization and improve performance
+  
+4) Database, data warehouse
+   - noSQL
+     a) cassandra
+     b) elastic search
+     c) mongodb
+   - Apache Hive
+   - PostgreSQL
+   - SQL vs NoSQL Databases
