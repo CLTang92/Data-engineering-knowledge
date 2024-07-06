@@ -1,0 +1,19 @@
+data pipeline designing - batch data pipeline
+
+Extract
+- what would be the source, maybe multiple, eg HDFS/AWS S3, noSQL, data warehouse service (eg. Apache Hive), SFTP
+- data format eg. json (semi-structure), csv (formatted-row & column), parquet (compressed file format in row & column), orc (compressed file format in row & column)
+- identify schema (initial data explore, it look like, atrribute, data type)
+
+Transformation
+- framework depends on 1) data going to process and frequency (batch, near real time or real time), batch & non real time use eg. SPARK, real time eg. Flink)
+**if only have data in datalake eg. aws s3, hdfs or mysql database, you directly want to compute something, direct query data available in data lake
+can use HIVE (data warehousing service, process using distributed computation - mapreduce) if no concern about speed and no complex processing, 
+because spark is in memory processing is fast
+- apply business rule (problem statement)
+
+Load
+- Destination eg. HDFS/S3, NoSSQL or Data warehousing service.
+Data warehousing service can directly query eg. Hive or aws redshift.
+HDFS/S3 to persistent storage, later time external table can be created, can be used for further processing
+noSQL- other type of analytical query or dashboarding, can have different dashboard tool like tablue, powerbi. load data eg. cassandra, mongoDB and elastic search
