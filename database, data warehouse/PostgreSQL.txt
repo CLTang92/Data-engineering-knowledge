@@ -1,0 +1,64 @@
+PostgreSQL
+
+1) count (*) - include null value, count (column name) - not include null value
+
+2) LIKE is case sensitive, ILIKE not case sensitive,  % is zero or more character, _ only 1 character, [ ] accept any character in the list eg. [cno] accept com, net and org. Wildcard characters are %, _ , [ ]
+
+
+3) between is inclusive eg BETWEEN 10 AND 20, included 10 and 20
+
+4) SELECT  ...., payment_date FROM payment WHERE EXTRACT(year from payment_date) =2022;
+
+
+5) default order is ASC
+
+6) <> same as !=
+
+7) aggregate functions-AVG, MIN, MAX, COUNT, SUM, cannot select other column 
+
+out, only can select those column with aggregate function, eg MIN(column name)  MAX(column name)
+
+8) GROUP BY - use COALESCE to handle nulls, use WHERE clause to filter data before grouping, use HAVING clause to filter aggregated results after grouping
+
+9) DATE(column name) - to get only the date from timestamp
+
+10) SELECT SUM(column name) FROM ...
+ORDER BY SUM(column name), need to include aggregate function of the particular column to ORDER BY, cannot just use column name, need to use SUM(column name) to order by
+
+11) filter aggregated function in HAVING
+Not Where clause, because need to go 
+
+through group by clause first
+SELECT ....
+GROUP BY..
+HAVING SUM(column name) > ..;
+
+12) AS - to rename, but when using HAVING can't use the new name, use back aggregated function,  eg. SUM(column name), AS only executed at last.
+
+
+==============================================pgAdmin====================================
+
+##PostgreSql create database
+
+-- Database: abc
+
+-- DROP DATABASE "abc";
+
+CREATE DATABASE "abc"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+
+###create ETL user
+
+--create etl user
+CREATE USER etl WITH PASSWORD 'demopass';
+--grant connect
+GRANT CONNECT ON DATABASE "abc" TO etl;
+--grant table permissions
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO etl;

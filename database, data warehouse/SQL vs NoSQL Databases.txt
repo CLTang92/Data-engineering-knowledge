@@ -1,0 +1,114 @@
+SQL vs NoSQL Databases
+
+
+SQL
+- querying relational databases
+- reduces data redundancy to a large extent, facilitates sharing of data among various users, and ensures the security of data
+- if you exceed the current capacity of your server, you would have to use a more powerful CPU, add more RAM, stack up the storage, etc. This is vertical scaling
+- ACID properties (Atomicity, Consistency,  Isolation,  Durability)
+- for transactional eg. Banking
+
+
+
+NoSQL (Not only SQL)
+- flexible, scalable, cost-efficient, and schema-less databases.
+- 4 types:
+	1) document-based : store data in JSON-like documents, each document has a key-value format and data is semi-structured, missing value will not throw error, eg. MongoDB, Orient DB, and BaseX.
+
+	2) key-value based: Both keys and values can be anything, from string to complex values. keys are stored in efficient index structures and can quickly and uniquely locate the values. ideal for applications that require fast retrieval of data. highly partitionable and are the best in horizontal scaling, useful in session oriented applications where we try to capture the behavior of the customer in a particular session. Eg. Amazon DynamoDB , Redis, and Aerospike.
+
+	3) wide column-based: similar to any relational database but it has the ability to store very large numbers of dynamic columns. number of column values for rows can vary in such databases. It groups the columns logically into column families. eg. Cassandra and HBase.
+
+	4) graph-based: use nodes to store data entities like places, products, etc. and edges to store the relationship between them. There is no limit to the number and kind of relationships a node can have. find out the relationship or pattern among your data points like a social network, recommendation engines, etc. Eg. Neo4j, Amazon Neptune, etc.
+
+- horizontal scaling. if you run out of capacity, you can simply add a machine to the cluster (a bunch of machines working together). These machines are usually much cheaper and are aptly referred to as commodity hardware.
+- Each machine will store some portion of the data.
+- distributing data offers us the capability to replicate data and offer fault tolerance
+- NoSQL is CAP theorem (consistency, availability, partition tolerance)
+- partition is bound to occur due to network failure or some other reason, when a partition happens, a NoSQL database has to either give up on Consistency or Availability. Hence, a NoSQL distributed database is either characterized as CP (MongoDB) or AP (Cassandra).
+- ElasticSearch stores log data, Cassandra is used by many social network websites
+- data is not split into multiple tables, as it allows all the data that is related in any way possible
+- don’t need to worry about the performance lags when you query
+- highly scalable and reliable and designed to work in a distributed environment.
+
+
+Types of NoSQL Databases
+ 
+
+1. Document-Based NoSQL Databases
+
+Document-based databases store the data in JSON objects. Each document has key-value pairs like structures. The document-based databases are easy for developers as the document directly maps to the objects as JSON is a very common data format used by web developers. They are very flexible and allow us to modify the structure at any time. Some examples of document-based databases are MongoDB, Orient DB, and BaseX.
+
+ 
+
+2. Key-Value Databases
+
+As the name suggests, it stores the data as key-value pairs. Here, keys and values can be anything like strings, integers, or even complex objects. They are highly partitionable and are the best in horizontal scaling. They can be really useful in session oriented applications where we try to capture the behavior of the customer in a particular session. Some of the examples are DynamoDB, Redis, and Aerospike.
+
+
+3. Wide Column-Based Databases
+
+This database stores the data in records similar to any relational database but it has the ability to store very large numbers of dynamic columns. It groups the columns logically into column families. For example, in a relational database, you have multiple tables but in a wide-column based database, instead of having multiple tables, we have multiple column families. Popular examples of these types of databases are Cassandra and HBase.
+
+ 
+
+4. Graph-Based Databases
+
+They store the data in the form of nodes and edges. The node part of the database stores information about the main entities like people, places, products, etc., and the edges part stores the relationships between them. These work best when you need to find out the relationship or pattern among your data points like a social network, recommendation engines, etc. Some of the examples are Neo4j, Amazon Neptune, etc.
+
+ 
+
+List of the Different NoSQL Databases
+
+1. MongoDB (Document-Based NoSQL Database, each document has key-value pairs like structures)
+
+MongoDB is the most widely used document-based database. It stores the documents in JSON objects.
+
+
+
+When to use MongoDB?
+- to integrate hundreds of different data sources, the document-based model of MongoDB will be a great fit as it will provide a single unified view of the data
+- a lot of reads and write operations from your application but you do not care much about some of the data being lost in the server crash
+- store clickstream data and use it for the customer behavioral analysis
+
+ 
+
+2. Cassandra (Wide Column-Based Database)
+
+
+Cassandra is an open-source, distributed database system that was initially built by Facebook (and motivated by Google’s Big Table). It is widely available and quite scalable. It can handle petabytes of information and thousands of concurrent requests per second.
+
+When to use Cassandra?
+- more writing operations than reading ones
+- where you need more availability than consistency. For example, you can use it for social network websites but cannot use it for banking purposes
+- less number of joins and aggregations in your queries to the database
+
+Eg. Health trackers, weather data, tracking of orders, and time series data
+
+
+3. ElasticSearch
+
+This is also an open-source, distributed NoSQL database system. It is highly scalable and consistent. You can also call it as an Analytics Engine.
+
+When to use ElasticSearch?
+- requires a full-text search
+- If your use case involves chatbots where these bots resolve most of the queries, such as when a person types something there are high chances of spelling mistakes. You can make use of the in-built fuzzy matching practices of the ElasticSearch
+- storing logs data and analyzing it
+
+4. Amazon DynamoDB (Key-Value Database)
+
+It is a key-value pair based distributed database system created by Amazon and is highly scalable. But unfortunately, it is not open-source.
+
+When to use DynamoDB?
+- handle simple key-value queries but those queries are very large in number
+- working with OLTP workload like online ticket booking or banking where the data needs to be highly consistent
+
+
+5. HBase (Wide Column-Based Database)
+
+It is also an open-source highly scalable distributive database system. HBase was written in JAVA and runs on top of the Hadoop Distributed File System (HDFS).
+
+When to use HBase?
+- have at least petabytes of data to be processed. If your data volume is small, then you will not get the desired results
+- use case requires random and real-time access to the data
+- easily store real-time messages for billions of people
