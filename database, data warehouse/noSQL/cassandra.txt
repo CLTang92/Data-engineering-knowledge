@@ -1,0 +1,70 @@
+data store in node
+many nodes form data center
+many data center form cluster
+
+cassandra
+1) replication 2 types - SimpleStrategy (1 data center) and NetworkTopologyStrategy (more than 2 data centers)
+
+steps:
+1) open terminal
+2) cassandra -f #start cassandra service
+3) file - open new tab
+4) cqlsh #if haven't connect, keep type this sqlsh, once ok, show cqlsh >
+5) Help #all available cql command
+6) capture #capture output of command and adds to a file
+7) consistency #write data to 1 node, whether to get acknowledgement from other node #normally set to 1
+8) create keyspace
+9) use keyspace
+10) create table
+cassandraspace> CREATE TABLE emp(emp_id int PRIMARY KEY, emp_name text, emp_city text, emp_sal varint, emp_phone varint);
+11) select * from emp;
+12) describe emp; #show what created
+keyspace = database
+13) truncate #delete data
+
+
+column family = table
+
+#minimum replication is 3 for better performance
+#default durable write is true
+
+
+#update durable writes
+-------------------------
+ALTER KEYSPACE bigcassandra WITH REPLICATION = {'class' : 'SimpleStrategy', 'replication_factor' : 3} AND DURABLE_WRITES = false;
+
+create index
+-------------
+1) CREATE INDEX <any_name> ON <table_name> (<column_name>);
+2) describe <table_name> #checking only
+
+
+list, map and set
+--------------------------
+List - collection of 1 or more ordered elements, used in the cases where the order of the elements is to be maintained. eg. email
+
+1) CREATE TABLE data(name text PRIMARY KEY, email
+list<text>);
+
+2) describe <database_name>; #to show table details
+
+3) INSERT INTO data(name, email) VALUES ('Ramu',['abc@gmail.com','cba@yahoo.com']);
+
+4) select * from <table_name>; #checking
+
+---------------
+map - collection of key-value pairs
+
+1) CREATE TABLE data3 (name text PRIMARY KEY, address map<text, text>);
+
+2) INSERT INTO data3 (name, address) VALUES ('robin',{'home' : 'hyderabad' , 'office': 'Delhi' } );
+
+
+-----------
+set - collection of 1 or more elements. element returned in sorted order eg. phone
+
+1) CREATE TABLE data2 (name text PRIMARY KEY, phone set<varint>);
+
+2) INSERT INTO data3 (name, address) VALUES ('robin',{'home' : 'hyderabad' , 'office': 'Delhi' } );
+
+2) INSERT INTO data2(name, phone) VALUES ('rahman', {9848022338,9848022339}); #result will return phone number in sorted order
