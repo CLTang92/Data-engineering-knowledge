@@ -1,0 +1,72 @@
+How to query s3 data from Amazon Athena using SQL
+______________________________________________________
+
+
+*Using Amazon Athena no need to move data from S3 to any database, data still sitting in S3, just create a table on top of it interactively querying data
+
+
+Steps:
+
+1) Upload dataset (eg. csv file) to S3
+- Go to S3 bucket, create a new folder
+Folder name: #any name
+click on "Create folder"
+- Upload data to this folder, click on "Add files", select the file and click "Upload"
+
+2) Go to Amazon Athena console, under "Get started"
+- select "Query your data" and click on "Launch query editor"
+
+3) Under "Amazon Athena" - "Query editor", need to create table catalog first
+
+###########create table catalog for the file uploaded###################
+
+#create crawler
+- Go to left panel of Amazon Athena, under "Tables and views", click "Create" and select "AWS Glue Crawler" #Glue crawler scan the uploaded file infer the schema and create a table
+- Under "Add information about your crawler"
+Crawler name: data-crawler #any name
+click "Next"
+Crawler source type: select "Data stores" #catalog not existing
+Repeat crawls of S3 data stores: select "Crawl all folders"
+click "Next"
+Choose a data store: select "S3"
+Connection: #no need to select
+Crawl data in: select "Specifies path in my account"
+Include path:  s3://xxxxxxx/<folder_name>/ #****select the folder where the file located, add "/" at the back so call all files in the folder 
+click "Next"
+Add another data store: select "No"
+click "Next"
+Choose an IAM role: select "Create an IAM role" #can select existing IAM role if vailable
+AWSGlueServiceRole-<any name> #any name, eg. data-crawler-iam-role
+*auto create IAM role and grants all require permissions eg. scan s3 folder for schema, as well as create table and etc
+**to create role, must have "CreateRole", "CreatePolicy" and "AttachRolePolicy" permissions
+click "Next"
+Under "Create a schedule for this crawler" - "Frequency": select "Run on demand" #run only when is needed
+click "Next"
+
+Under "Configure the crawler's output"
+- Database:  select "Add database" #where the table will be added
+Database name: xxxx_db #any name
+then click "Create"
+click "Next" and click "Finish"
+#crawler created
+
+#run crawler
+4) Under AWS Glue - Crawlers, check on the crawler created (status is "Ready"), then click on "Run crawler"
+5) Refresh the crawler by clicking icon "refresh" at the right, until it is completed and status back to "Ready", then it will auto create table in Amazon Athena
+*can see the table at "AWS Glue"-"Tables" (Under left panel, "Data Catalog"-"Databases"-"Tables")
+###############################
+
+6) back to Amazaon Athena - left panel under "Data", click icon "Refresh"
+- Data source: AwsDataCatalog
+- Database: #select database created
+#now can see the table created, can expand the table to see schema imported
+##so the table is auto created with schema being imported
+
+##***running query in Amazon Athena need to configure query output location where store result in S3
+7) At "Amazon Athena" - "Query editor", go to "Settings" tab , click on "Manage" button and set "Query result location" eg. s3://athena-results-xxxx/
+
+#start query
+1) At "Amazon Athena", click on "Editor" tab
+2) Under table, there is 3 dots button next to table name, click on it and select "Preview Table" #preview table
+3) can start to write sql query and run
+eg. SELECT * FROM "xxxxx_db"."data" where xxxxxx = 'xxx'  #"data" is the table name in this example
