@@ -23,6 +23,7 @@ Table of content
    - Difference Between OLTP and OLAP
    - Kafka
    - REST API
+   - Web Application Architecture
    - cloud computing
    - data model, query optimization and improve performance
   
@@ -31,6 +32,7 @@ Table of content
      a) cassandra
      b) elastic search
      c) mongodb
+   - Amazon Athena
    - Apache Hive
    - PostgreSQL
    - SQL vs NoSQL Databases
