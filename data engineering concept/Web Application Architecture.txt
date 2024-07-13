@@ -1,0 +1,124 @@
+Web Application Architecture
+------------------------------
+- Structural framework that guides the design and development of a web application.
+- It involves a set of principles and best practices that determine how different parts of the application work together to deliver its intended functions.
+- blueprint that organizes the frontend, (what users see), backend, (server and business logic), and database, ensuring they interact smoothly.
+
+
+
+
+
+Main Goals of Web Application Architecture
+----------------------------------------------
+- The primary objectives of web application architecture revolve around ensuring the efficiency, reliability, and scalability of a digital system. 
+- Provide a seamless and intuitive user experience by organizing the frontend components, such as interfaces and interactions, in a user-friendly manner. 
+- Addresses backend functionality, focusing on creating a robust and efficient server that handles app logic, processes data, and communicates effectively with the frontend. 
+- Scalability: Design a system that can handle growth in users or data volume without compromising performance. 
+- Security considerations are woven into the web application architecture to safeguard sensitive information and protect against potential threats.
+
+
+
+
+
+Components of Web Application Architecture
+------------------------------------------------
+
+1. Domain Name System
+- DNS serves as the internet’s address book, translating user-friendly domain names into IP addresses that computers use to locate one another on the network.
+
+2. Load Balancer
+- Seamlessly orchestrating the distribution of incoming network traffic to ensure optimal performance and reliability. 
+- This is essential when managing tasks such as distributing traffic, scaling, handling faults, maintaining sessions, checking health, and managing SSL.
+- Its integration empowers web applications to deliver consistent, reliable, and high-performance experiences to users, regardless of fluctuating demands or potential server challenges.
+
+3. Web Application Servers
+- Handle the processing of user requests, execute application logic, and interact with databases to generate dynamic content. 
+- Servers facilitate communication between the web browser and the backend of the application. They send the generated content back to the browser for display, allowing users to interact seamlessly with the application.
+-  Eg. Apache Tomcat, Nginx, and Microsoft Internet Information Services (IIS). 
+
+4. Databases
+- Managing and organizing data. They serve as repositories for structured information, ensuring efficient storage, retrieval, and presentation of data for web applications. 
+- Often choose between relational databases like MySQL and PostgreSQL, known for their structured data storage, and NoSQL databases like MongoDB, offering flexibility for unstructured data.
+
+5. Caching Service
+- Storing and facilitating swift retrieval of frequently accessed data. When users request information from the server, the results of these operations are cached, allowing subsequent requests for the same data to be processed faster. 
+- Significantly enhances performance by referencing previous results, which is particularly beneficial in scenarios where computations are slow and likely to occur frequently.
+- The effectiveness of caching is particularly evident when dealing with computationally intensive tasks, scenarios where repeated computations are anticipated, and situations where the outcomes remain constant for specific requests.
+
+6. Job Queue (optional)
+- Two essential elements: the job queue itself and dedicated servers. In this operational structure, servers are designated to process jobs listed in the queue.
+- This approach becomes particularly valuable for web servers handling an extensive volume of tasks that may not be of immediate priority.
+- When a specific job requires fulfillment, it is directed to the job queue, where it patiently awaits its turn to be processed based on a predetermined schedule. 
+- This organized system allows web servers to efficiently manage a multitude of tasks, ensuring that critical operations take precedence while less time-sensitive jobs are systematically processed. 
+- Optimizing the allocation of server resources, contributing to the overall efficiency and responsiveness of web server operations.
+
+7. Full-Text Search Service (optional)
+- The ability to perform efficient text searches, often referred to as a “request,” allows users to input queries, prompting the application to retrieve and present the most relevant results. 
+- Streamlines the search process, ensuring users receive accurate and meaningful results based on their queries.
+
+8. Services
+- Manifest as distinct applications, although they might not be prominently visible within the web application interface. 
+- Interact seamlessly with the primary web application and other associated services.
+- Collaborate harmoniously with the broader web app architecture, enhancing the application’s capabilities and responsiveness. 
+
+9. Data Warehouse
+- Modern applications hinge on effective data handling involving a streamlined process.
+- Data initially flows through a “firehose,” ensuring continuous streaming. Subsequently, the collected raw, processed, and additional data resides in secure and scalable cloud storage. 
+- Processed and additional data finds its place in a Data Warehouse.
+- Centralized hub accommodating diverse file types and providing structured data for efficient retrieval and analysis. 
+- Contributing significantly to the robustness and analytical capabilities of contemporary applications.
+
+10. CDN
+- Simplifies the process of sharing HTML, CSS, JavaScript, and image files.
+- By spreading these files across servers worldwide, a CDN ensures that people can access diverse content quickly and efficiently. 
+- It makes web content more accessible, allowing users to load various resources from the nearest server, resulting in faster and smoother experiences.
+
+
+
+
+Web Application Components Models
+-------------------------------------
+
+1. One Web Server, One Database
+- A lone server handling both the application logic and a singular database
+- The vulnerability of this model becomes evident when the solitary server encounters downtime; the entire system grinds to a halt
+- Go-to choice for running test projects and serving as a foundational platform for individuals aiming to grasp the fundamentals of web application development.
+
+
+2. Multiple Web Servers, One Database
+- When a client provides information to the web server, the server processes and writes the data to an external database. The data’s management and storage occur independently of the server, resulting in a stateless system.
+- Minimum of two web servers is required to implement this web app architecture effectively. This redundancy is crucial for enhancing the model’s reliability. If one server experiences a failure or goes down, the second server seamlessly takes over.
+
+3. Multiple Web Server, Multiple Databases
+- This sophisticated model stands out for its meticulous redundancy strategy, which extends not only to databases but also to servers, giving the system unmatched levels of fault tolerance.
+
+
+
+
+
+Types of Web Application Architecture
+---------------------------------------
+
+Frontend:
+
+1) Single-Page Application (SPAs)
+- Users witness updated content effortlessly injected into the current page, eliminating the need for full-page reloads.
+- JavaScript orchestrates the behind-the-scenes processes, facilitating the dynamic loading of content and ensuring a swift and responsive user interface. 
+
+2) SSR or Server-Side Rendered Application
+- Server handle the rendering
+- Ability to swiftly deliver crucial assets, such as HTML and CSS, directly from the server, significantly reduces the time users wait for a web page to load.
+- Server compiles the necessary data and serves up a fresh HTML document upon receiving each user request. This dynamic process enables the browser to start painting the User Interface (UI) without the need to wait for the entire JavaScript to load.
+
+
+Backend:
+
+1) Microservices
+- Break down functionalities into small, standalone services that each perform a specific task, emphasizing agility and efficiency.
+- Microservices don’t demand uniformity in programming languages. Each component is free to be developed in the language that best suits its purpose.
+- Optimize each microservice for its specific role, resulting in a more responsive and adaptable system. 
+
+
+2) Serverless Architecture
+- Frees developers from the intricacies of configuring and overseeing servers running management software. The entire infrastructure is entrusted to third-party providers.
+- Simplifies the development process by allowing developers to execute their code without worrying about server configurations.
