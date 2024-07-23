@@ -1,0 +1,215 @@
+Scrapy
+
+Install Scrapy
+-----------------
+#install anaconda
+1) go to anaconda.com - click on "Get Started" - select "Download Anaconda installers" - select your OS - after downloaded the file, run it ("continue")
+
+
+#after done anaconda installation, create virtual environment
+2) Open Anaconda,  select left panel "Environments", clieck bottom icon "+" to create new environment
+3) under "Create new environment"
+Name: my_scrapy_venv #any name
+Packages: checked "Python", "3.8"
+click "Create"
+
+#after venv created, open terminal to install scrapy
+4) At "Environments" - "my_scrapy_venv" - click on "Open Terminal" - "OK"
+5) in terminal (#now parenthesis is virtual environment)
+
+#install scrapy
+conda install -c conda-forge scrapy
+press "enter"
+Proceed: press "y"
+
+
+Setting up Scrapy with Pycharm
+-----------------------------------
+
+1) #setup Pycharm in anaconda environment
+in terminal:
+which python (Mac)
+where python (Windows)
+#output is the path where python interpreter located: /opt/anaconda3/envs/my_scrapy_venv/bin/python
+**copy this path to sync pycharm with anaconda environment
+
+2) Open pycharm and open folder "/opt/anaconda3/envs" #go to envs folder of the path
+#now have envs folder open in pycharm
+
+3) #setup environment in pycharm
+Tab "File" - select "Setting", select " Project: envs" and select "Project Interpreter", go to top right icon "setting", click "Add...",
+select left panel "Conda Environment", select "Existing environment", under "Interpreter" click button "...", paste "/opt/anaconda3/envs/my_scrapy_venv/bin/python", click "OK"  #put the path copied just now, want to sync pycharm with anaconda environment
+Under "Conda executable:" /opt/anaconda3/bin/conda, click "OK", click "OK"
+
+##until here pycharm and anaconda are setup
+
+
+4) #lastly, install protego package for scrapy and anaconda to work correctly in pycharm, go to Terminal
+type:
+conda install -c conda-forge protego
+#show "All requested packages already installed."
+
+
+
+
+##### Scrapy command##############
+1) open terminal
+- go to anaconda, click on "my_scrapy_venv", click on "Open Terminal", then "OK"
+OR
+- go to pycharm and open the terminal, at the bottom left corner, click on "Terminal"
+*either way, terminal parenthesis is virtual environment
+
+##scapy command, write on terminal
+
+1) scrapy #show all scrapy command
+2) scrapy bench #show how efficient is scrapy in my computer
+3) scrapy fetch <url> #get html markup from website, *need to write http
+eg. scrapy fetch http://google.com
+4) scrapy genspider #used often, allow generate new spider using pre-defined templates, scrape in website
+5) scrapy settings #display default setting
+6) scrapy shell #test code in website, don't want to create new spider
+7) scrapy startproject #create new project
+8) scrapy version #show scrapy version
+
+
+
+###CREATE FIRST PROJECT AND SPIDER########
+1) #start new project in scrapy, in virtual environment terminal, type below:
+scrapy startproject <project_name> eg. scrapy startproject spider_tutorial
+
+2) cd spider_tutorial/ #change directory to this project folder
+3) scrapy genspider <name of the spider, any name> <url> eg.  scrapy genspider worldometers www.xxxxxxxxxxxxxxxxxx #to start a new spider, **the url delete https:// and / at the back
+#UNTIL HERE SPIDER IS CREATED USING BASIC TEMPLATE
+
+4) now go to pycharm, left panel envs folder - spider_tutorial folder - another spider tutorial folder, inside this folder, there is a "spiders" folder, click on worldometers.py (#just created)
+
+import scrapy
+
+class WorldometersSpider(scrapy.Spider):
+	name = 'Worldometers' #spider name must be unique
+	allowed_domains = ['www.worldometers.info/'] 
+	start_urls = ['https://www.worldometers.info/world-population/population-by-country/'] #add s after http for security purpose
+
+	def parse(self, response): #response to find element, scrapy only use xpath to find element
+		pass
+
+##SOME INFO####
+response.xpath('//tag[@AttributeName="Value"]')
+
+#finding element with Scrapy
+response.xpath().get() #only get single element
+response.xpath().getall() #to get all elements eg. List=[a,b,c,d]
+
+#returning elements with scrapy
+yield #work same as "return" keyword when define function, can return value from a function without destroying the state of local variable
+
+###########
+
+
+##Scrapy's shell command, to test code
+1) before start scraping the website, test code in shell command
+- go to the webpage, right click, select "Inspect"
+- ctrl + F, then type //h1, verify is it the xpath we want
+2) go to terminal (virtual environment), type below:
+scrapy shell
+then will show >>> means we are in shell mode
+
+now type code:
+
+r = scrapy.Request(url='https://www.xxxxxxxxxxxxxxxxxxx.population-by-country/')
+
+fetch(r)  #open spider
+
+reponse.body #show html of this website
+
+response.xpath('//h1') #get the specific element we want eg. h1, output <h1>xxxxxxxx>
+
+response.xpath('//h1/text()') #will show the text of h1 but with data value
+
+response.xpath('//h1/text()').get() #now only get the text of h1
+
+#go to web page, now if want to get text at <a href> under <td>, can search by //td/a
+
+response.xpath('//td/a/text()').getall()
+
+
+###########done code testing#############
+
+
+
+##Now start to build spider using scrapy
+------------------------------------------
+
+1) now go to pycharm, left panel envs folder - spider_tutorial folder - another spider tutorial folder, inside this folder, there is a "spiders" folder, click on worldometers.py
+
+import scrapy
+
+class WorldometersSpider(scrapy.Spider):
+	name = 'Worldometers' #spider name must be unique
+	allowed_domains = ['www.worldometers.info/'] 
+	start_urls = ['https://www.worldometers.info/world-population/population-by-country/'] #add s after http for security purpose
+
+	def parse(self, response): #response to find element, scrapy only use xpath to find element
+		title = response.xpath('//h1/text()').get()
+		country = response.xpath('//td/a/text()').getall()
+
+	#use yield to display data in a dictionary
+	
+	yield {
+	    'titles':title,
+	    'countries':countries,
+	}
+
+
+2) go to terminal, use pycharm or anaconda terminal, both are same
+
+**NEED TO LOCATE in the folder we created eg. spider_tutorial, need to make sure in the folder that contains 'scrapy.cfg' file, eg. (my_scrapy_venv) xxxx-xxxx-x: spider_tutorial xxxx$
+
+now type code below:
+scrapy crawl wordometers #worldometers is the name of the spider we created eg. worldometers.py
+
+
+
+##Export data to csv or json
+-------------------------------
+
+1) now go to pycharm, left panel envs folder - spider_tutorial folder - another spider tutorial folder, inside this folder, there is a "spiders" folder, click on worldometers.py
+
+
+#add and modify some code in spider and #title
+
+import scrapy
+
+class WorldometersSpider(scrapy.Spider):
+	name = 'Worldometers' #spider name must be unique
+	allowed_domains = ['www.worldometers.info/'] 
+	start_urls = ['https://www.worldometers.info/world-population/population-by-country/'] #add s after http for security purpose
+
+	def parse(self, response): #response to find element, scrapy only use xpath to find element
+		rows = response.xpath('//tr')		
+
+		for row in rows:
+			#title = response.xpath('//h1/text()').get()
+			countries = row.xpath('./td/a/text()').get() #now no need to use getall because extract 1 element per iteration, dot (in front of /td refers to using row variable as reference which is //tr)
+			population = row.xpath('./td[3]/text()').get() #[3] means 3rd td element
+
+			#use yield to display data in a dictionary
+	
+			yield {
+	    		    #'titles':title,
+	    		    'countries':countries,
+			    'population;: population,
+			}
+
+
+2) run the spider and export data to csv/json file
+- go to terminal, use pycharm or anaconda terminal, both are same
+
+
+#export data to csv file, run code below
+scrapy crawl wordometers -o population_1.csv #worldometers is the name of the spider we created eg. worldometers.py, and write the name of csv or json we want
+ - go to pycharm to open the csv file, left panel of pycharm, envs/spider_tutorial/spider_tutorial/population_1.csv, can compare the data with web page to make sure is correct
+
+#export data to json file, run code below
+scrapy crawl wordometers -o population_2.json #worldometers is the name of the spider we created eg. worldometers.py, and write the name of csv or json we want
+ - go to pycharm to open the json file, left panel of pycharm, envs/spider_tutorial/spider_tutorial/population_2.json, can compare the data with web page to make sure is correct
