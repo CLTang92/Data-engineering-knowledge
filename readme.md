@@ -12,13 +12,17 @@ Table of content
    - designing an ETL, how to perform ETL operations on large and complex data sets
    - simple ETL example (Python file)
   
-2) Big data platforms
+2) Web Scraping
+   - Scrapy
+   - Selenium
+  
+3) Big data platforms
    - AWS EMR
    - Hadoop and spark, read and write to hdfs
    - Understanding Hadoop Ecosystem
    - databricks
   
-3) Data engineering concept
+4) Data engineering concept
    - Databases vs. Data Warehouses vs. Data Lakes
    - Difference Between OLTP and OLAP
    - Kafka
@@ -27,7 +31,7 @@ Table of content
    - cloud computing
    - data model, query optimization and improve performance
   
-4) Database, data warehouse
+5) Database, data warehouse
    - noSQL
      a) cassandra
      b) elastic search
