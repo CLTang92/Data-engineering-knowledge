@@ -1,0 +1,287 @@
+Selenium
+- web scraping with python
+- allow to scrap dynamic website
+
+#installing Selenium and ChromeDriver
+1) #download ChromeDriver to install Selenium
+- go to web browser, chromedriver.chromium.org/downloads
+- choose the version that near to Chrome version
+* to know Chrome version, click on "..." button at Google Chrome - click "Help" - "About Google Chrome"
+- download the zip file according to your OS
+- once downloaded, unzip the file, remember the path of this file
+
+#now install selenium in pycharm
+1) in pycharm, open terminal and type:
+pip install selenium
+
+OR
+
+#install selenium in command prompt
+1) go to command prompt, active virtual environment
+2) type:
+pip install selenium
+
+
+Importing libraries and creating the driver
+===============================================
+1) at pycharm, type codes as below:
+
+from selenium import webdriver #to create a driver to scrap website
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+2) right click and run the code
+*will show browser and stated "Chrome is being controlled by automated test software.", it refers to Selenium, means the code is successfully executed
+
+3) add one more code in pycharm:
+driver.quit() #close the chrome window
+
+-----------------complete code---------
+from selenium import webdriver #to create a driver to scrap website
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+driver.quit() #close the chrome window
+
+-----------------------
+
+
+
+#clicking on a button
+
+1) in web page, inspect element, right click - "inspect"
+2) ctrl + F, write XPath syntax to locate the "All matches" button
+//tagName[@AttributeName="Value"] eg. //label[@analytics-event="All matches"]
+
+3) back to pycharm, add the below codes to locate element in Selenium:
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+------------------complete code--------
+from selenium import webdriver #to create a driver to scrap website
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+#driver.quit() #close the chrome window
+-----------------------------
+
+4) run the codes again, #driver.quit() to see the result in browser, hold XQ to quit manually after done checking
+
+
+
+
+Extracting data from a table
+==============================
+1) in web page, inspect element, right click - "inspect"
+
+# driver.find_element_by_tag_name('tr') #only locate 1 element
+
+matches = driver.find_elements_by_tag_name('tr') #find multiple elements by using plural "elements" #normally get a list
+
+for match in matches:  #to get data in matches list
+	print(match.text) #this .text will return the text of the element
+
+
+-----------------complete code---------
+from selenium import webdriver #to create a driver to scrap website
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+
+matches = driver.find_elements_by_tag_name('tr') #find multiple elements by using plural "elements" #normally get a list
+
+for match in matches:  #to get data in matches list
+	print(match.text) #this .text will return the text of the element
+
+#driver.quit() #close the chrome window
+-----------------------------
+
+2) run code again and in Pycharm terminal can see selenium is scraping all the data
+*the result of the row will be 1 column, so divide each field to a list for each, refer next step
+
+3) add code:
+date = []
+home_team = []
+score = []
+away_team = []
+
+for match in matches:  #to get data in matches list
+	date.append(match.find_element_by_xpath('./td[1]').text)   # dot refer to matches = driver.find_elements_by_tag_name('tr')
+	home_team.append(match.find_element_by_xpath('./td[2]').text)
+	score.append(match.find_element_by_xpath('./td[3]').text)
+	away_team.append(match.find_element_by_xpath('./td[4]').text)
+
+
+
+---------------complete code-----------
+from selenium import webdriver #to create a driver to scrap website
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+
+matches = driver.find_elements_by_tag_name('tr') #find multiple elements by using plural "elements" #normally get a list
+
+date = []
+home_team = []
+score = []
+away_team = []
+
+for match in matches:  #to get data in matches list
+	date.append(match.find_element_by_xpath('./td[1]').text)   # dot refer to matches = driver.find_elements_by_tag_name('tr')
+	home_team.append(match.find_element_by_xpath('./td[2]').text)
+	score.append(match.find_element_by_xpath('./td[3]').text)
+	away_team.append(match.find_element_by_xpath('./td[4]').text)
+
+#driver.quit() #close the chrome window
+-----------------------------
+
+4) to test whether the code is correct, can try to print home variable by modify code:
+
+FROM
+------
+home_team.append(match.find_element_by_xpath('./td[2]').text)
+
+MODIFY TO
+-----------
+home = match.find_element_by_xpath('./td[2]').text
+home_team.append(home)
+print(home)
+
+
+5) run code again to see result, can see there is result of home printed in terminal (since we print(home))
+
+
+
+
+Exporting data to a csv file (or json file) with Pandas
+=========================================================
+1) #install pandas
+- go to pycharm terminal, type:
+pip install pandas
+
+2) add code in pycharm and enable driver.quit()
+import pandas as pd
+
+df = pd.DataFrame({'date': date, 'home_team': home_team, 'score': score, 'away_team': away_team}) #can create dataframe from different way, since we have list, so use dictionaries, dictionaries are made of list
+df.to_csv('football_data.csv', index=False) #by default dataframe work with index which is 1,2,3,..., so by setting index=False to disable it
+print(df)
+
+-------------complete code-------------
+from selenium import webdriver #to create a driver to scrap website
+import pandas as pd
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+
+matches = driver.find_elements_by_tag_name('tr') #find multiple elements by using plural "elements" #normally get a list
+
+date = []
+home_team = []
+score = []
+away_team = []
+
+for match in matches:  #to get data in matches list
+	date.append(match.find_element_by_xpath('./td[1]').text)   # dot refer to matches = driver.find_elements_by_tag_name('tr')
+	home_team.append(match.find_element_by_xpath('./td[2]').text)
+	score.append(match.find_element_by_xpath('./td[3]').text)
+	away_team.append(match.find_element_by_xpath('./td[4]').text)
+
+driver.quit() #close the chrome window, driver quit after scraping process
+
+df = pd.DataFrame({'date': date, 'home_team': home_team, 'score': score, 'away_team': away_team}) #can create dataframe from different way, since we have list, so use dictionaries, dictionaries are made of list
+df.to_csv('football_data.csv', index=False) #by default dataframe work with index which is 1,2,3,..., so by setting index=False to disable it
+print(df)
+-----------------------------
+
+3) run code again and check whether the csv file is created
+
+
+###########COMPLETED################
+
+
+##ADDITIONAL#########
+#Selecting elements within a dropdown, example here is dynamic dropdown, link won't change when selecting other value
+
+1) add codes:
+from selenium.webdriver.support.ui import Select
+import time #to use wait, because sometimes page need some time to load data, avoid error when using Selenium when it can't find data
+
+dropdown = Select(driver.find_element_by_id('country')) #use Select when see dynamic dropdown, link won't change
+dropdown.select_by_visible_text('Spain') #if by index is start from 1, index is by position
+
+time.sleep(3) #set wait how many second eg. 3 seconds before run the next code
+
+
+------------complete code--------------
+from selenium import webdriver #to create a driver to scrap website
+from selenium.webdriver.support.ui import Select
+import pandas as pd
+import time #to use wait, because sometimes page need some time to load data, avoid error when using Selenium when it can't find data
+
+website = 'https://www.xxxxxxxxxxxxxxx'
+path = '/Users/xxxxx/chromedriver' #where we downloaded the chromedriver
+driver = webdriver.Chrome(path) #use chrome since use chromedriver, if use Firefox then will be webdriver.Firefox
+driver.get(website) #open a browser/driver
+
+all_matches_button = driver.find_element_by_xpath('//label[@analytics-event="All matches"]')
+all_matches_button.click() #use selenium to click button
+
+dropdown = Select(driver.find_element_by_id('country')) #use Select when see dynamic dropdown, link won't change
+dropdown.select_by_visible_text('Spain') #if by index is start from 1, index is by position
+
+time.sleep(3) #set wait how many second eg. 3 seconds before run the next code
+
+matches = driver.find_elements_by_tag_name('tr') #find multiple elements by using plural "elements" #normally get a list
+
+date = []
+home_team = []
+score = []
+away_team = []
+
+for match in matches:  #to get data in matches list
+	date.append(match.find_element_by_xpath('./td[1]').text)   # dot refer to matches = driver.find_elements_by_tag_name('tr')
+	home_team.append(match.find_element_by_xpath('./td[2]').text)
+	score.append(match.find_element_by_xpath('./td[3]').text)
+	away_team.append(match.find_element_by_xpath('./td[4]').text)
+
+driver.quit() #close the chrome window, driver quit after scraping process
+
+df = pd.DataFrame({'date': date, 'home_team': home_team, 'score': score, 'away_team': away_team}) #can create dataframe from different way, since we have list, so use dictionaries, dictionaries are made of list
+df.to_csv('football_data.csv', index=False) #by default dataframe work with index which is 1,2,3,..., so by setting index=False to disable it
+print(df)
+-----------------------------
+
+2) run code again
+
+
+###COMPLETED#######
